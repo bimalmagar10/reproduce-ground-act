@@ -94,6 +94,13 @@ class AlpamayoBackend:
         return self.helper.to_device(inputs, self.device)
 
     # ------------------------------------------------------------------ generation
+    @staticmethod
+    def _fresh(inputs: dict) -> dict:
+        """Shallow copy: the R1 rollout pops ``input_ids`` from the dict it is given."""
+        out = dict(inputs)
+        out["tokenized_data"] = dict(inputs["tokenized_data"])
+        return out
+
     def generate(self, inputs: dict, mode: str = "continuous", num_candidates: int = 6,
                  top_p: float = 0.98, temperature: float = 0.6, max_cot_tokens: int = 256,
                  seed: int | None = 42, corrector=None) -> GenerationResult:
@@ -110,7 +117,7 @@ class AlpamayoBackend:
         raise ValueError(mode)
 
     def _generate_continuous(self, inputs, S, top_p, temperature, max_cot_tokens, corrector):
-        kwargs = dict(data=inputs, top_p=top_p, temperature=temperature, num_traj_samples=S,
+        kwargs = dict(data=self._fresh(inputs), top_p=top_p, temperature=temperature, num_traj_samples=S,
                       max_generation_length=max_cot_tokens, return_extra=True)
         if corrector is None:
             pred_xyz, pred_rot, extra = self.model.sample_trajectories_from_data_with_vlm_rollout(**kwargs)
@@ -128,7 +135,7 @@ class AlpamayoBackend:
 
     def _generate_discrete(self, inputs, S, top_p, temperature, max_cot_tokens):
         model = self.model
-        data = copy.deepcopy(inputs)
+        data = self._fresh(inputs)
         tokenized = data["tokenized_data"]
         input_ids = tokenized.pop("input_ids")
         hist_xyz, hist_rot = data["ego_history_xyz"], data["ego_history_rot"]
