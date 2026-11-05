@@ -1,0 +1,20 @@
+[project]
+name = "groundact_repro"
+version = "0.1.0"
+description = "Inference-side reproduction of GroundAct's open-loop evaluation protocol and grounded-planning logic on Alpamayo checkpoints"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy",
+  "pandas",
+  "pyarrow",
+  "scipy>=1.16",
+  "torch",
+  "huggingface-hub",
+]
+
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["groundact_repro"]
