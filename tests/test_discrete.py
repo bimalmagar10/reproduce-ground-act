@@ -44,3 +44,14 @@ def test_count_valid():
     seq = torch.tensor([[1, 2, 3, 7, START, 11, 12, 45, 13, END, EOS], [1, 2, 3, 7, 7, 7, 7, 7, 7, 7, 7]])
     n = count_valid_traj_tokens(seq, 3, START, END, TRAJ_LO, TRAJ_LO + FUT_VOCAB)
     assert n.tolist() == [3, 0]
+
+
+def test_first_step_with_empty_generation():
+    from groundact_repro.discrete import DiscreteTrajectoryLogitsProcessor
+    proc = DiscreteTrajectoryLogitsProcessor(prompt_len=5, traj_future_start_id=10, traj_future_end_id=11,
+                                             traj_token_start_idx=20, traj_vocab_size=8, future_vocab_size=6,
+                                             tokens_per_future_traj=4, eos_token_id=1)
+    ids = torch.zeros(3, 5, dtype=torch.long)
+    scores = torch.zeros(3, 40)
+    out = proc(ids, scores)
+    assert torch.isfinite(out[:, :20]).all() and (out[:, 20:28] < -1e30).all()

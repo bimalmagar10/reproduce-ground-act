@@ -21,7 +21,7 @@ def main():
     ap.add_argument("--model", required=True)
     ap.add_argument("--clip", default="030c760c-ae38-49aa-9ad8-f5650a545d26")
     ap.add_argument("--t0-us", type=int, default=5_100_000)
-    ap.add_argument("--attn", default="flash_attention_2")
+    ap.add_argument("--attn", default="sdpa")
     ap.add_argument("--cameras", default="front_wide")
     ap.add_argument("--num-candidates", type=int, default=2)
     ap.add_argument("--correction", action="store_true")

@@ -36,6 +36,10 @@ class DiscreteTrajectoryLogitsProcessor(LogitsProcessor):
 
     def phase(self, input_ids: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         gen = input_ids[:, self.prompt_len:]
+        B = gen.shape[0]
+        if gen.shape[1] == 0:  # first decode step: nothing generated yet, every row is in CoC
+            z = torch.zeros(B, dtype=torch.long, device=gen.device)
+            return z.bool(), z
         is_start = gen == self.start_id
         has_start = is_start.any(dim=1)
         pos = is_start.int().argmax(dim=1)

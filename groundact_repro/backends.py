@@ -48,7 +48,7 @@ def detect_family(model_path: str) -> str:
 
 
 class AlpamayoBackend:
-    def __init__(self, model_path: str, family: str | None = None, attn: str = "flash_attention_2",
+    def __init__(self, model_path: str, family: str | None = None, attn: str = "sdpa",
                  dtype=torch.bfloat16, device: str = "cuda", cuda_graph: bool = False):
         self.model_path = model_path
         self.family = family or detect_family(model_path)

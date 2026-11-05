@@ -52,7 +52,7 @@ def parse():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--start", type=int, default=0)
-    ap.add_argument("--attn", default="flash_attention_2", choices=["flash_attention_2", "sdpa"])
+    ap.add_argument("--attn", default="sdpa", choices=["flash_attention_2", "sdpa"])
     ap.add_argument("--cuda-graph", action="store_true")
     ap.add_argument("--no-actors", action="store_true", help="skip actor labels / collision metric")
     ap.add_argument("--correction", default="off",

@@ -72,7 +72,7 @@ done
 python scripts/summarize.py results
 ```
 
-Use `--attn sdpa` if flash-attn did not build. `--cameras all` runs the Alpamayo-native
+Use `--attn flash_attention_2` only if the flash-attn build is known good (the default is SDPA). `--cameras all` runs the Alpamayo-native
 4-camera input instead of the paper's front-wide-only protocol. GPU memory: ~40 GB for six
 candidates (the six candidates are six independent CoC rollouts, as in Alpamayo's evaluation code).
 
